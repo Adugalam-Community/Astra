@@ -1,0 +1,168 @@
+rules_version = '2';
+
+// ===============================================================
+// ScaleAstra Assumed Data Model
+// ===============================================================
+//
+// Collection: users/{userId}
+// Document ID: Firebase Auth UID
+// Fields:
+//   - uid: string (required, immutable)
+//   - email: string (required)
+//   - displayName: string (optional)
+//   - activeBusinessId: string (optional)
+//   - createdAt: string or timestamp (required, immutable)
+//
+// Collection: businesses/{businessId}
+// Document ID: Business Identifier (e.g. biz_purewild_001)
+// Fields:
+//   - id: string (required, immutable)
+//   - name: string (required)
+//   - category: string (required)
+//   - ownerUid: string (required)
+//   - currency: string (required)
+//   - gstNumber: string (optional)
+//   - phone: string (optional)
+//   - email: string (optional)
+//   - address: string (optional)
+//
+// Subcollections under businesses/{businessId}/:
+//   - members/{userId}: role ('owner', 'admin', 'member')
+//   - leads/{leadId}: Lead CRM records
+//   - customers/{customerId}: Customer profiles & consent
+//   - products/{productId}: Product catalog & inventory
+//   - orders/{orderId}: Customer orders & payment status
+//   - invoices/{invoiceId}: Tax invoices
+//   - workflows/{workflowId}: Automation triggers & conditions
+//   - executions/{executionId}: Execution history & retry logs
+//   - consentRecords/{consentId}: DPDP Consent tracking ledger
+//   - auditLogs/{logId}: Immutable business audit logs
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if the current authenticated user is a verified member or owner of the business workspace
+    function isWorkspaceMember(businessId) {
+      return isAuthenticated() && (
+        request.auth.uid == resource.data.ownerUid ||
+        request.auth.uid == request.resource.data.ownerUid ||
+        exists(/databases/$(database)/documents/businesses/$(businessId)/members/$(request.auth.uid)) ||
+        // Allow fallback during initial dev/pilot setup if businessId is owned or user has access
+        (exists(/databases/$(database)/documents/businesses/$(businessId)) &&
+         get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerUid == request.auth.uid)
+      );
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // ===============================================================
+    // Users Collection
+    // ===============================================================
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) &&
+        request.resource.data.uid == request.auth.uid &&
+        isValidEmail(request.resource.data.email);
+      allow update: if isOwner(userId) &&
+        request.resource.data.uid == resource.data.uid;
+      allow delete: if isOwner(userId);
+    }
+
+    // ===============================================================
+    // Businesses Workspaces
+    // ===============================================================
+    match /businesses/{businessId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() &&
+        request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isAuthenticated() &&
+        (resource.data.ownerUid == request.auth.uid || isWorkspaceMember(businessId));
+      allow delete: if isAuthenticated() &&
+        resource.data.ownerUid == request.auth.uid;
+
+      // Workspace Members Subcollection
+      match /members/{memberId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated() &&
+          (get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerUid == request.auth.uid ||
+           request.auth.uid == memberId);
+      }
+
+      // Leads Subcollection
+      match /leads/{leadId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Customers Subcollection
+      match /customers/{customerId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Products Catalog Subcollection
+      match /products/{productId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Orders Subcollection
+      match /orders/{orderId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Invoices Subcollection
+      match /invoices/{invoiceId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Workflows Subcollection
+      match /workflows/{workflowId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Workflow Executions Subcollection
+      match /executions/{executionId} {
+        allow read, write: if isAuthenticated();
+      }
+
+      // Consent Records (DPDP Compliance Ledger)
+      match /consentRecords/{recordId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update, delete: if false; // Append-only audit record
+      }
+
+      // Audit Logs Subcollection
+      match /auditLogs/{logId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update, delete: if false; // Immutable audit log
+      }
+    }
+
+    // Default deny for all other unmatched documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,534 @@
+SCALEASTRA
+Developer Brief, Unified Architecture & MVP Build Specification
+Product direction • Modules • Data model • Workflow • AI master prompt • Validation plan • Risks and missing decisions
+Version 1.0  |  22 October 2026  |  Initial budget ceiling: ₹25,000
+1. Executive Summary
+ScaleAstra is intended to become a multi-tenant AI-assisted sales-automation platform for small and micro product businesses. The first market test should focus on packaged product brands—initially honey and similar natural-food brands—rather than trying to serve every industry at launch.
+The commercial approach is hybrid: sell a done-for-you automation setup first, use a reusable core engine and repeatable templates, then productize the common workflows into self-service SaaS only after multiple paying customers prove that the same workflow can be reused.
+The first release is a responsive web app, not a native iOS/Android app. It must make core records persistent, protect each business's data, and distinguish demo/simulated integrations from live integrations.
+Decision area
+Current decision
+Product / brand
+ScaleAstra — broad platform vision; narrow first offer
+Initial niche
+Small packaged-product brands; test honey and similar natural-food businesses first
+Delivery model
+Hybrid: managed service first, reusable engine, then SaaS
+Build approach
+AI-assisted no-code/low-code; generated code still requires engineering review
+Initial budget
+Below ₹25,000; proposed spending ceiling, not a commitment to spend it all
+Initial build tool
+Google AI Studio Build mode as first option; do not build the same app in several builders simultaneously
+Backend
+Firebase Authentication + Cloud Firestore, subject to generated security rules review
+Automation
+Start with deterministic predefined workflows; add complex workflow builder later
+First milestone
+1–3 paying pilot customers initially; stretch goal 3–5, using one repeatable workflow
+2. Product Strategy and Positioning
+2.1 The product promise
+Suggested positioning: “WhatsApp Sales Automation for Small Product Brands.” ScaleAstra helps a small product business capture enquiries, respond promptly, manage leads and orders, create invoices, and follow up with eligible customers for repeat purchases.
+Sell measurable business outcomes—not “AI” as a buzzword. Potential outcomes include fewer missed enquiries, faster response, more consistent follow-up, clearer order status, and more systematic repeat-customer engagement. Do not promise sales growth until it has been measured.
+2.2 Why niche-first, not separate apps
+Build one shared platform and one codebase.
+Use category-specific workflow templates and configuration, not separate software per business.
+Start with one niche because it makes the offer, sales content, onboarding, and workflow more repeatable.
+Do not expand to snacks, skincare, retail, or other verticals until the first workflow is reused successfully across several paying customers.
+2.3 Service-to-SaaS path
+Phase
+What is delivered
+Exit evidence
+Phase 1: Managed pilot
+Team configures lead capture, messaging, catalogue/order flow, tracking and reports
+Customers pay; workflow operates; value and objections are documented
+Phase 2: Reusable engine
+Standard templates, onboarding form, logs, common integrations and repeatable setup
+Several customers use substantially the same workflow; onboarding time declines
+Phase 3: SaaS
+Business signup, workspace setup, integration connection, workflow activation, billing and support controls
+Self-service onboarding is safe and reliable; support burden and unit economics are acceptable
+3. Scope: MVP, Later, Out of Scope
+3.1 MVP — required
+Authentication and business workspace setup.
+Business profile: name, category, contact details, currency, time zone and basic preferences.
+Dashboard with real counts and recent activity; demo data must be labelled and excluded from live metrics.
+Lead CRM: create, view, edit, search, filter, source, status, notes and follow-up date.
+Customer records and consent/source records where applicable.
+Product catalogue: SKU, name, description, price, category and stock status.
+Orders: customer, line items, quantity, totals, delivery details and status lifecycle.
+Basic invoice records and printable/downloadable output using validated order data; tax configuration must be explicit.
+Predefined workflow execution with trigger, conditions, actions, execution status, errors, idempotency and bounded retries.
+Integration settings and explicit live/demo status.
+Audit log for important actions and owner notifications.
+Basic reporting for lead sources, orders, recorded revenue and conversion, with metric definitions.
+3.2 Later, after pilots
+AI-assisted lead classification, enquiry summaries and reply drafting.
+Repeat-purchase and reorder reminder templates.
+One-click campaigns to eligible, opted-in audiences, with preview and approval.
+Advanced analytics and campaign attribution.
+More industry templates and configurable workflows.
+Self-service onboarding, billing, team permissions and integration marketplace.
+3.3 Explicitly out of scope for first release
+Native mobile app.
+Building a WhatsApp API provider, CRM, accounting system or invoice engine from scratch.
+Autonomous ad creation, ad-budget changes or campaign launching.
+Complex inventory, ERP, shipping or accounting integrations.
+A general-purpose drag-and-drop workflow builder.
+AI agents independently committing prices, stock, payment status or other consequential business decisions.
+4. Recommended Tool Stack and Cost Guardrails
+Layer
+Initial option
+Notes / checks
+AI app builder
+Google AI Studio Build mode
+Use as the first builder. Check current account limits, supported stack, export and deployment options.
+Frontend
+Generated React + TypeScript (if supported by builder)
+Responsive web app; reusable components; avoid unnecessary UI libraries.
+Authentication
+Firebase Authentication
+Configure authorized providers, session handling and workspace membership.
+Database
+Cloud Firestore
+Review indexes, document structure, rules, quotas, retention and billing settings.
+Version control
+GitHub
+Back up early; commit before major AI-generated changes; never commit secrets.
+Workflow integration
+Make or server-side workflow functions
+Begin with deterministic flows; monitor action/operation usage and service limits.
+Lead source
+Meta Instant Forms or click-to-WhatsApp
+Actual choice depends on customer funnel, permissions and available integration access.
+Messaging
+Existing MSGPEDIA integration if API/webhooks are available; otherwise an approved compatible provider
+Verify API credentials, inbound webhooks, templates, delivery callbacks, opt-in and costs before promising live automation.
+Invoice
+Existing invoicing service or controlled invoice generation
+Tax treatment, invoice fields, numbering and legal requirements need review.
+AI
+Optional model API after rules-based workflow works
+Keep model use limited and secrets server-side; account for usage costs.
+Landing page
+Existing website or simple form tool
+Do not build a large marketing website before demand validation.
+Budget rule: ₹25,000 is a maximum planning ceiling, not a requirement to spend it. Use free tiers where available, but verify current quotas, billing requirements, provider terms, messaging charges, deployment cost and tax implications. Never assume “AI generated” means “free to run.”
+5. Unified Architecture
+[Responsive Web App]
+Dashboard | Leads | Customers | Products | Orders | Invoices
+Automations | Integrations | Reports | Settings | Activity Log
+|
+v
+[Application / Business Logic Layer]
+Authentication & workspace authorization
+Input validation and business rules
+Lead deduplication and state transitions
+Workflow trigger / condition / action executor
+Invoice calculations and order lifecycle
+Integration adapters, retries and audit events
+|
++---------+---------+
+|                   |
+v                   v
+[Firebase]             [External Integrations]
+Authentication         Meta Lead Forms / Webhooks
+Firestore               WhatsApp provider / MSGPEDIA
+Security Rules          Invoice provider (if used)
+Notifications / optional AI
+|
+v
+[Security & Observability]
+Tenant isolation | Server-side secrets
+Consent checks | Audit logs | Error logs
+Execution status | Provider delivery status
+Architectural rule: UI, core business logic, database and external integrations must remain separate. Each provider should be behind a server-side adapter so it can be changed without rewriting the entire product.
+5.1 Trust boundaries
+The browser is not trusted for authorization, price totals, payment state, invoice numbering or secret handling.
+Every business-owned record must be scoped to a verified business workspace.
+All external webhook payloads must be validated; verify signatures where the provider supports them.
+Use server timestamps for trusted audit events.
+Do not execute arbitrary code generated by AI as a workflow action.
+Demo adapters and live adapters must be visibly and technically separate.
+5.2 Suggested folder structure
+src/
+app/                  routes and page composition
+components/           reusable UI components
+features/
+dashboard/
+leads/
+customers/
+products/
+orders/
+invoices/
+automations/
+integrations/
+reports/
+settings/
+lib/
+firebase/
+validation/
+permissions/
+metrics/
+services/
+leads/
+customers/
+products/
+orders/
+invoices/
+workflows/
+integrations/
+types/
+tests/
+server/                  trusted server-side functions/adapters
+docs/
+architecture.md
+data-model.md
+security-review.md
+test-plan.md
+This is a suggested structure, not a rigid requirement. Adapt it to the framework and server runtime actually generated by the selected builder.
+6. Core User Journeys and Workflows
+6.1 New lead to order
+Meta Form / Website Form / WhatsApp Enquiry
+-> validate incoming data
+-> normalize contact fields
+-> check duplicate / idempotency key
+-> record source, timestamp and consent context
+-> save lead in database
+-> evaluate permitted response rules
+-> send approved message through live provider OR mark demo/simulated
+-> store provider message ID and delivery status
+-> create owner follow-up task/notification
+-> customer expresses order intent
+-> validate product, quantity, price and availability
+-> create order in pending-confirmation state
+-> owner verifies stock, delivery and payment evidence
+-> confirm appropriate order state
+-> generate invoice from validated data
+-> fulfil order and record outcome
+-> offer eligible post-purchase/reorder workflow
+6.2 Workflow engine requirements
+Trigger: event that starts a workflow, e.g. lead.created or order.confirmed.
+Conditions: deterministic rules, including business settings, consent and current state.
+Actions: validated operations such as create task, send approved message, update status or notify owner.
+Execution record: workflow ID, business ID, trigger event ID, start/end timestamps, status, attempts and error details.
+Idempotency: reprocessing the same event must not duplicate a message, order or invoice.
+Retries: bounded retries with backoff for transient failures; do not retry permanent errors indefinitely.
+Human approval: required for consequential actions such as unverified payment, price/stock commitments or sensitive outbound campaigns.
+Observability: visible execution history and failed-run alerting.
+6.3 Order lifecycle
+Recommended states: draft → pending_confirmation → confirmed → paid → fulfilled, with cancelled and refunded states where relevant. Define allowed transitions and role permissions. Do not mark paid based only on a customer claim or screenshot; require a trusted payment-provider event or explicit authorized owner verification.
+6.4 Messaging rules
+Record consent/source and respect opt-outs and applicable provider policies.
+Use approved templates and allowed messaging windows where required by the channel.
+Do not send promotional messages to every lead by default.
+Store send status separately from delivery/read status; a successful API request does not prove delivery.
+Provide manual fallback and owner visibility when messaging fails.
+7. Data Model
+Entity / collection
+Key fields (illustrative)
+Important rules
+users
+uid, email, displayName, createdAt
+Identity only; workspace access comes from verified membership.
+businesses
+businessId, name, category, currency, timezone, settings
+One workspace per business; define owner and lifecycle.
+memberships
+businessId, userId, role, status
+Server/rules must verify membership before data access.
+leads
+businessId, leadId, name, phone/email, source, status, consentRef, createdAt, nextFollowUpAt
+Validate inputs; deduplicate carefully; preserve source and consent context.
+customers
+businessId, customerId, contact fields, consent state, createdAt
+Minimize personal data; define access and retention.
+products
+businessId, productId, SKU, name, price, currency, stockStatus, active
+Server validates price and availability at order time.
+orders
+businessId, orderId, customerId, items, subtotal, tax, total, paymentStatus, fulfilmentStatus
+Recalculate totals server-side; validate allowed state transitions.
+invoices
+businessId, invoiceId, orderId, invoiceNumber, line items, tax breakdown, totals, issuedAt
+Avoid duplicate issuance; numbering and tax rules need jurisdiction-specific review.
+workflowDefinitions
+businessId, workflowId, trigger, conditions, actions, active, version
+Allow only a predefined, validated action schema.
+workflowExecutions
+businessId, executionId, workflowId, eventId, status, attempts, errors, timestamps
+Idempotency, bounded retries and observability.
+integrationSettings
+businessId, provider, status, secret reference, non-secret config
+Never store plaintext tokens in client-readable documents.
+consentRecords
+businessId, customer/lead reference, channel, purpose, source, timestamp, status
+Support opt-out and evidence of consent where applicable.
+auditLogs
+businessId, actorId, action, entityType, entityId, timestamp, metadata
+Append-only where feasible; do not log secrets or excessive personal data.
+The final schema must be reviewed against actual Firestore query patterns, indexes, security rules, deletion/retention needs and expected volume. Do not rely on a businessId field alone without rules that verify the user's membership.
+8. Module-by-Module Functional Requirements
+Module
+Required functions / acceptance criteria
+Authentication & workspace
+Sign in/out; create workspace; verified membership; roles; prevent access to other businesses; handle disabled users.
+Dashboard
+Use stored data; clear metric definitions; filters/time range where feasible; exclude demo data from live totals.
+Leads
+Create/edit/view/search/filter; source attribution; status history; notes; follow-up date; deduplication; import/API validation.
+Customers
+Customer profile; linked orders; consent status and opt-out; controlled access to contact information.
+Products
+CRUD; SKU; price; active/stock status; server validation at order creation.
+Orders
+Line items; validated totals; delivery details; allowed status transitions; payment evidence; cancellation/refund handling.
+Invoices
+Unique numbering strategy; validated source order; item/tax breakdown; printable/downloadable output; no invented tax rate.
+Automations
+Predefined templates; enable/disable; trigger/condition/action schema; execution log; retry/error controls.
+Integrations
+Configuration status; server-side secrets; test mode; webhook verification; provider IDs; disconnect/reconnect.
+Reports
+Leads by source; lead-to-order conversion; order count; recorded revenue; date range; explain missing attribution.
+AI assistant (later)
+Draft/classify/summarize; approved context only; no autonomous payment, price, stock or invoice decisions.
+Admin & audit
+Role-aware settings; audit important actions; integration health; failure queue; safe support access.
+9. AI Builder Master Prompt
+Use the following master prompt in Google AI Studio Build mode (or adapt it to the selected AI app builder). First ask the builder to plan the architecture, then implement in stages. Do not paste API secrets into the prompt.
+Build a production-minded, responsive, multi-tenant web application called ScaleAstra.
+PRODUCT PURPOSE
+ScaleAstra helps small product businesses automate lead capture, customer follow-up, product catalogue management, order tracking, invoicing and repeat-purchase workflows. The initial niche is small packaged-product businesses, starting with honey and similar natural-food brands. The architecture must support additional industry templates later.
+TECHNOLOGY
+- Use React with TypeScript for the frontend if supported by the selected builder.
+- Use the supported server-side runtime for secure business logic and external API calls.
+- Use Firebase Authentication and Cloud Firestore for login and persistent storage, subject to platform compatibility.
+- Keep the architecture modular and suitable for gradual SaaS expansion.
+- Use server-side secret management for API credentials.
+- Do not introduce paid dependencies unless explicitly approved.
+DESIGN
+Create a professional, premium SaaS dashboard with a restrained dark-purple and white interface, accessible contrast, clear typography, responsive tables and mobile-friendly navigation. Avoid unnecessary visual complexity.
+CORE MODULES
+1. Authentication and business workspace setup.
+2. Dashboard with leads, orders, recorded revenue and recent activity.
+3. Lead CRM with source, status, contact details, notes, timestamps and follow-up date.
+4. Customer database with purchase history and consent records.
+5. Product catalogue with SKU, description, price, stock status and category.
+6. Orders with line items, quantities, totals, delivery details and lifecycle status.
+7. Invoices based on validated order data, with printable/downloadable output.
+8. Automation engine with triggers, conditions, actions, execution history and errors.
+9. Messaging templates and integration status.
+10. Reports for lead sources, conversion, orders and recorded revenue.
+11. Settings for business details, users, roles and integrations.
+12. Audit log for important business actions.
+MULTI-TENANT SECURITY
+Every business-owned record must include businessId. Every authenticated user must have explicit workspace membership and a role. Users must only access records belonging to workspaces they are authorized to access. Enforce this in database security rules and server-side authorization, not only in the UI. Do not trust a client-supplied businessId without verifying membership. Do not expose secrets in browser code.
+DATA MODELS
+Define appropriate structures for users, businesses, memberships, leads, customers, products, orders, invoices, workflowDefinitions, workflowExecutions, integrationSettings, consentRecords and auditLogs. Include createdAt, updatedAt and relevant status fields. Define relationships, validation rules and deletion/retention behaviour. Use trusted server timestamps for audit events.
+LEAD WORKFLOW
+Accept leads through a documented internal API or test form. Validate input, normalize fields, deduplicate where possible, record the source and save the lead. Check consent and messaging eligibility before sending any message. Provide owner notification and a clear failure state.
+AUTOMATION ENGINE
+Implement a small deterministic workflow engine. Support explicit triggers, conditions and actions. Include execution IDs, idempotency, bounded retries, timestamps, success/failure states and error logs. Do not execute arbitrary generated code or allow an AI model to invent unrestricted actions.
+ORDERS AND INVOICES
+Support draft, pending confirmation, confirmed, paid, fulfilled, cancelled and refunded states where appropriate. Verify payment through a trusted source or explicit authorized owner confirmation. Never assume payment is complete merely because a customer says they paid. Generate invoice records only from validated order data. Make tax settings configurable; do not invent tax rates.
+META AND WHATSAPP
+Create clean server-side integration interfaces for Meta lead capture and the configured WhatsApp Business Platform provider. Build settings and status screens. Until credentials, permissions, webhook verification and API access are configured, use a clearly labelled demo adapter. Never expose tokens or webhook secrets in client code. Respect consent, templates and applicable messaging rules. Store credentials only in secure server-side secrets.
+DASHBOARD AND REPORTING
+Display total leads, qualified leads, orders, conversion rate, recorded revenue and recent activity. Explain metric definitions. Exclude demo records from live metrics. Do not fabricate data or claim campaign results that are not measured.
+AI FEATURES
+Make AI-assisted lead classification and reply drafting optional. Keep prices, stock commitments, payment verification, invoice issuance and other consequential decisions under explicit business rules and/or human approval.
+QUALITY REQUIREMENTS
+Provide CRUD functionality, validation, search, filters, loading states, empty states, error handling and mobile responsiveness. Use reusable components and a maintainable folder structure. Include setup instructions, environment variable documentation, database schema documentation, security rules, README and a manual test checklist.
+BUILD PROCESS
+First produce an implementation plan and architecture. Then build the application in stages, test each stage, fix errors and explain what is complete, what is simulated and what remains unconfigured. Prioritize a functioning, secure MVP over unnecessary features.
+10. Staged Prompts for the Builder
+Prompt A — UI shell
+Implement Stage 1 only. Build the complete responsive ScaleAstra dashboard shell with sidebar navigation, top bar, Dashboard, Leads, Customers, Products, Orders, Automations, Reports, Integrations and Settings pages. Use clearly labelled demo data. Make navigation, filters, forms and status actions interactive. Do not connect external services yet. Preserve a consistent design. At the end, list pages implemented and remaining work.
+Prompt B — Firebase and persistent data
+Implement Stage 2 only. Integrate Firebase Authentication and Cloud Firestore using the supported builder integration. Replace demo-only CRUD for Leads, Customers, Products and Orders with persistent data. Define and review Firestore Security Rules. Every business-owned document must be isolated by verified workspace membership and role. Add tests for cross-tenant access denial. Do not store secrets in client code. Preserve the UI and explain manual Firebase configuration steps.
+Prompt C — Workflow and business logic
+Implement Stage 3 only. Build a deterministic lead-to-order workflow engine. Support lead creation, validation, deduplication, status transitions, owner notifications, order creation, payment status verification, invoice records, execution logs and failure handling. Use server-side logic for trusted operations. Make state transitions auditable. Add idempotency and bounded retries. Do not claim external messages were sent unless the provider confirms delivery. Include tests and preserve existing working functionality.
+Prompt D — Meta and WhatsApp integration
+Implement Stage 4 only. Inspect the existing code and create server-side integration adapters for Meta lead capture and the configured WhatsApp Business Platform provider. Do not assume credentials or access already exist. Tell me the exact credentials, permissions, webhook URLs and verification steps required. Store secrets in the server-side secrets manager. Verify webhook signatures where supported, validate incoming data, check consent and messaging eligibility, handle API errors and rate limits, and record provider message IDs and delivery statuses. Keep demo mode separate from live mode. Do not send real messages until I explicitly enable the integration after testing.
+Prompt E — Release-readiness review
+Act as a senior software engineer reviewing ScaleAstra. Inspect the existing implementation rather than rebuilding it. Identify broken routes, forms, CRUD and database queries. Verify persistence across refresh and authorized sessions. Review authentication, workspace membership and Firestore rules for cross-tenant leakage. Check that secrets and privileged operations remain server-side. Test lead deduplication, workflow retries, order transitions and invoice calculations. Verify demo integrations cannot appear as live deliveries. Test mobile responsiveness, loading, empty and error states. Run available tests and fix confirmed defects without removing working features. Provide a prioritized list of risks and manual tests. Do not claim production readiness merely because the build succeeds.
+11. Seven-Day Execution Plan
+Day
+Tasks
+Deliverable / exit condition
+1
+Lock niche, offer, workflow and pilot price; create list of target businesses.
+One-page offer and clear workflow; no unnecessary build spend.
+2
+Interview 10 business owners; record current enquiry, order, follow-up and repeat-purchase process.
+Problem evidence, objections, current tools and willingness-to-pay signals.
+3
+Create database schema and CRUD for leads, products, customers and orders.
+Data persists; basic operations and validation work.
+4
+Connect a test lead source to database; add deduplication, owner alert and logs.
+Repeatable test lead creates one record and a visible execution outcome.
+5
+Verify MSGPEDIA API/webhooks and WhatsApp permissions; test only with controlled contacts.
+Documented integration status, credentials path and known limitations.
+6
+Publish niche-specific content and demo; book sales conversations.
+Qualified conversations, not just views or generic waitlist signups.
+7
+Demo to prospects; ask for paid pilot; review defects, objections and setup time.
+At least five demo conversations targeted; next step recorded for every prospect.
+12. Days 8–30 Roadmap
+Period
+Focus
+Exit condition
+Days 8–14
+Run the first live pilot with owner oversight; measure delivery, response, orders, failures and setup time.
+At least one customer uses the workflow in real operations; failures are visible.
+Days 15–21
+Standardize onboarding, templates, logs, reporting and support checklist; approach more prospects.
+Common workflow reused with limited customization.
+Days 22–30
+Compare customers; identify shared functionality; review security and unit economics; decide what to productize.
+Evidence-based decision to continue, adjust offer, change workflow or reconsider niche.
+13. Pricing Hypotheses and Unit Economics
+These are test prices, not proven market rates. Confirm willingness to pay through paid pilots and calculate actual support costs before committing.
+Offer
+Initial test price
+Scope guardrail
+Pilot setup
+₹4,999 one-time
+One agreed workflow, database setup, basic integration and handover; define exact deliverables.
+Managed automation
+₹4,999/month
+Monitoring, limited maintenance, reporting and defined support limits.
+Advanced growth
+₹7,999–₹12,999/month hypothesis
+Only when multiple workflows, reporting and additional support are demonstrably valuable.
+Keep ad spend, WhatsApp usage, other provider charges, taxes and extraordinary support separate unless explicitly included. Example: five accounts at ₹4,999/month = ₹24,995 monthly recurring revenue before labour, software, messaging, acquisition, taxes and other expenses. Revenue is not profit.
+Track: setup hours per customer; recurring support hours; software/API cost per account; qualified lead-to-demo rate; demo-to-paid conversion; successful message delivery; lead-to-order conversion; churn/renewal; gross margin.
+14. Validation Targets and Decision Gates
+Metric
+Initial target / rule
+Business owners contacted
+30–50 over first month as a working target
+Discovery conversations
+10–15
+Demos
+5–8
+Paid pilots
+1–3 initial target; 3–5 stretch goal, not a forecast
+Continue
+At least one pays, the workflow works reliably, and setup can be repeated.
+Adjust offer
+Prospects acknowledge the problem but reject package, price or scope.
+Change workflow
+Customers pay but the automation does not address the operational bottleneck.
+Reconsider niche
+After meaningful interviews and demos, there is little willingness to pay.
+Do not treat Instagram views, comments, waitlist signups or a polished UI as proof of product-market fit. Payment, actual use, operational results and repeatability matter more.
+15. Missing Items and Risk Signals — Resolve Before Production
+This section is deliberately direct. The current concept is promising as a testable direction, but several critical decisions remain open. A developer should not silently guess these.
+15.1 Product and commercial gaps
+Niche is a hypothesis, not validated demand. Interview owners and obtain paid pilots before broadening categories.
+The buyer and user may differ. Define whether the owner, sales operator or agency user controls the workspace.
+Define exact pilot deliverables, support hours, service-level expectations, onboarding responsibilities and cancellation terms.
+Define pricing treatment for provider charges, ad spend, tax and custom work.
+Define how a customer can export data and leave the platform.
+15.2 Technical gaps
+Exact builder-generated framework and server runtime must be inspected before finalizing implementation details.
+Meta app setup, permissions, lead access, app review requirements and webhook configuration need verification.
+MSGPEDIA integration capabilities are not yet confirmed: API docs, inbound webhooks, outbound sends, delivery callbacks, template support, tenant isolation, rate limits and commercial reuse permissions.
+Payment gateway is undecided. Decide whether MVP uses manual owner verification or a verified payment-provider integration.
+Invoice requirements must be reviewed for the business's jurisdiction, tax registration and invoice type.
+Need backup/restore, error monitoring, workflow queue strategy, rate limiting, abuse prevention and integration health checks before wider deployment.
+Need a production deployment plan, custom domain, TLS, environment separation, and an explicit rollback/restore procedure.
+Need a defined test suite and human review of generated code and rules; successful compilation is not proof of security.
+15.3 Privacy, security and compliance gaps
+Define a privacy notice, lawful collection purpose, retention period, deletion/export process and customer support contact.
+Store consent evidence and implement opt-out/suppression lists for applicable messaging.
+Review applicable Indian data protection, consumer, tax and messaging requirements with a qualified professional before live commercial use.
+Restrict access to personal data by role; avoid logging access tokens, payment data or unnecessary customer content.
+Define incident response, credential rotation, backup retention and account offboarding.
+Do not use real customer data in public AI prompts or unapproved demo environments.
+15.4 Critical warning signs
+Signal
+Why it matters
+Response
+AI-generated UI uses local/mock data only
+It can look complete while no real records persist.
+Test CRUD, refresh, sessions and backend directly.
+All users can query records by changing businessId
+Cross-tenant data leak risk.
+Block release; fix server authorization and database rules.
+API token appears in frontend bundle or repository
+Credential theft and account abuse risk.
+Rotate token; move to server-side secrets; audit logs and history.
+A send request is displayed as delivered
+False status and poor customer trust.
+Separate accepted, sent, delivered, read and failed states as provider supports.
+Payment status is editable without authorization/evidence
+Fraud and accounting risk.
+Server-side state transitions and verified evidence/authorized approval.
+Every customer requires bespoke code
+Business scales like an agency, not SaaS.
+Standardize the workflow or charge separately for customization.
+No willingness to pay after real demos
+The problem/offer may not be valuable enough.
+Change offer or niche before adding features.
+Free tier cannot support production usage
+Unexpected costs or service interruption.
+Calculate usage, limits and upgrade triggers before launch.
+16. Security and Acceptance Test Checklist
+User A from Business A cannot read or write Business B's leads, customers, products, orders, invoices, workflows or logs.
+Unauthenticated requests cannot access private records or privileged actions.
+A client cannot change trusted totals, invoice numbers, payment status or business ownership by editing requests.
+Secrets are absent from browser bundles, public repositories, logs and AI prompts.
+Duplicate lead/webhook events do not duplicate messages, orders or invoices.
+Invalid payloads and expired/invalid webhook signatures are rejected.
+Consent/opt-out is checked immediately before outbound messaging.
+A failed provider request is logged and visible; retries are bounded and safe.
+Demo/simulated events are clearly labelled and excluded from live metrics.
+Invoice totals are recalculated from validated line items; tax is not guessed.
+Order status transitions reject invalid transitions.
+Data persists after refresh and sign-in/out; permissions work across sessions.
+Data export, account deletion/offboarding and retention behaviour are documented.
+Backups/restoration and a deployment rollback process are tested before production.
+17. Decisions the Founder Must Confirm
+Decision
+Recommended starting point
+Must confirm before live launch
+Initial category
+Honey and similar packaged natural-food brands
+Yes — after customer interviews
+First lead source
+Meta Instant Form or click-to-WhatsApp; choose based on pilot
+Yes
+Messaging provider
+Existing MSGPEDIA access if technically and contractually supported
+Yes
+Payment handling
+Manual authorized owner verification in first pilot
+Yes
+Invoice rules
+Use a suitable existing service or validated invoice generation
+Yes, including tax/legal review
+Hosting/deployment
+AI Studio-supported deployment or another reviewed host
+Yes, including cost/billing check
+AI usage
+Optional classification/reply drafting after core flow works
+Not required for first MVP
+Pilot pricing
+₹4,999 setup / ₹4,999 monthly as hypotheses
+Validate with customers
+18. Final Recommendation
+Build a secure, persistent lead-to-order workflow before attempting a broad automation platform. Use AI to accelerate implementation, not to bypass product decisions, security review or testing. The first milestone is three paying businesses using substantially the same workflow with limited customization. If each customer requires a different system, do not call it scalable SaaS yet.
+Immediate founder actions: (1) interview ten target businesses; (2) verify MSGPEDIA API/webhook capabilities and Meta access; (3) build the lead/product/order MVP; (4) obtain at least one paid pilot; (5) measure setup time, operating cost and actual workflow outcomes.
+Appendix A — Developer Handoff Instructions
+Read this specification and return a short technical implementation plan, assumptions and unresolved questions before major coding.
+Identify what the selected AI builder can generate natively and what needs custom server-side work.
+Do not replace the whole codebase with each prompt; use incremental changes and version control.
+At every stage, report: implemented, tested, simulated, unconfigured, known defects and next steps.
+Do not use live customer data or send real customer messages until the founder approves the integration and test plan.
+Before production, provide source code, deployment instructions, environment-variable list, database schema, security rules, tests and known limitations.
