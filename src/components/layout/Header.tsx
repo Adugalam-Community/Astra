@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
-import { 
-  Search, 
-  Bell, 
-  HelpCircle, 
-  ChevronDown, 
+import {
+  Search,
+  Bell,
+  HelpCircle,
+  ChevronDown,
   CheckCircle2,
   Sparkles,
   Play,
@@ -21,12 +21,12 @@ import {
 import { DateRangeOption } from '../../context/AppContext';
 
 export const Header: React.FC = () => {
-  const { 
-    workspace, 
+  const {
+    workspace,
     updateWorkspace,
-    activeTab, 
-    setActiveTab, 
-    runLeadSimulation, 
+    activeTab,
+    setActiveTab,
+    runLeadSimulation,
     simulationActive,
     setActiveModal,
     dateRange,
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
       {/* Primary Top Bar */}
       <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-2.5 max-w-7xl mx-auto w-full">
-        
+
         {/* Left Section: Mobile Hamburger + Logo + Desktop Workspace */}
         <div className="flex items-center gap-3 sm:gap-6">
           {/* Mobile Hamburger Menu Toggle */}
@@ -94,8 +94,8 @@ export const Header: React.FC = () => {
 
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <span 
-              onClick={() => setActiveTab('dashboard')} 
+            <span
+              onClick={() => setActiveTab('dashboard')}
               className="font-heading font-extrabold text-xl text-slate-900 tracking-tight cursor-pointer"
             >
               ScaleAstra
@@ -120,9 +120,8 @@ export const Header: React.FC = () => {
                         updateWorkspace({ name: opt });
                         setWorkspaceMenuOpen(false);
                       }}
-                      className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 transition-colors ${
-                        workspace.name === opt ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                      }`}
+                      className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 transition-colors ${workspace.name === opt ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                        }`}
                     >
                       {opt}
                     </button>
@@ -144,7 +143,7 @@ export const Header: React.FC = () => {
 
         {/* Center: Global Search Bar (Desktop) */}
         <div className="flex-1 max-w-md hidden md:block">
-          <div 
+          <div
             onClick={() => setActiveModal('search')}
             className="relative cursor-pointer group"
           >
@@ -163,7 +162,7 @@ export const Header: React.FC = () => {
 
         {/* Right Section: Mobile Search Button + Date filter + Bell + Help + Profile */}
         <div className="flex items-center gap-1.5 sm:gap-3">
-          
+
           {/* Mobile Search Icon Button */}
           <button
             onClick={() => setActiveModal('search')}
@@ -199,7 +198,7 @@ export const Header: React.FC = () => {
 
           {/* Desktop Date Selector Dropdown */}
           <div className="relative hidden sm:block">
-            <button 
+            <button
               onClick={() => {
                 setDateMenuOpen(!dateMenuOpen);
                 setNotificationsOpen(false);
@@ -221,9 +220,8 @@ export const Header: React.FC = () => {
                       setDateMenuOpen(false);
                       showToast(`Dashboard date range set to ${opt.label}`);
                     }}
-                    className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 transition-colors flex items-center justify-between ${
-                      dateRange === opt.value ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                    }`}
+                    className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 transition-colors flex items-center justify-between ${dateRange === opt.value ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                      }`}
                   >
                     <span>{opt.label}</span>
                     {dateRange === opt.value && <Check className="w-3.5 h-3.5 text-orange-600" />}
@@ -236,36 +234,33 @@ export const Header: React.FC = () => {
           {/* Firebase Cloud Sync Status Pill */}
           <button
             onClick={() => setActiveModal('firebaseAuth')}
-            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-              firebaseUser
+            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${firebaseUser
                 ? isFirebaseSyncEnabled
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100'
                   : 'bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100'
                 : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200'
-            }`}
+              }`}
             title="Firebase Cloud Sync (scaleastra-prod)"
           >
-            <Cloud className={`w-3.5 h-3.5 ${
-              firebaseUser
+            <Cloud className={`w-3.5 h-3.5 ${firebaseUser
                 ? isFirebaseSyncEnabled ? 'text-emerald-600' : 'text-amber-600'
                 : 'text-slate-400'
-            }`} />
+              }`} />
             <span className="font-heading font-bold text-[11px]">
-              {firebaseUser 
+              {firebaseUser
                 ? (isFirebaseSyncEnabled ? 'Firebase Live' : 'Firebase Paused')
                 : 'Firebase Sync'
               }
             </span>
-            <span className={`w-1.5 h-1.5 rounded-full ${
-              firebaseUser 
+            <span className={`w-1.5 h-1.5 rounded-full ${firebaseUser
                 ? (isFirebaseSyncEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500')
                 : 'bg-slate-300'
-            }`} />
+              }`} />
           </button>
 
           {/* Bell Icon & Notifications Dropdown */}
           <div className="relative">
-            <button 
+            <button
               onClick={() => {
                 setNotificationsOpen(!notificationsOpen);
                 setDateMenuOpen(false);
@@ -294,7 +289,7 @@ export const Header: React.FC = () => {
                     )}
                   </div>
                   {unreadCount > 0 && (
-                    <button 
+                    <button
                       onClick={markAllNotificationsRead}
                       className="text-[11px] font-semibold text-orange-600 hover:text-orange-700"
                     >
@@ -305,12 +300,11 @@ export const Header: React.FC = () => {
 
                 <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
                   {notifications.map(n => (
-                    <div 
+                    <div
                       key={n.id}
                       onClick={() => markNotificationRead(n.id)}
-                      className={`p-3.5 hover:bg-slate-50/80 transition-colors cursor-pointer ${
-                        !n.read ? 'bg-orange-50/20' : ''
-                      }`}
+                      className={`p-3.5 hover:bg-slate-50/80 transition-colors cursor-pointer ${!n.read ? 'bg-orange-50/20' : ''
+                        }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <span className={`font-semibold ${!n.read ? 'text-slate-900 font-bold' : 'text-slate-700'}`}>
@@ -324,7 +318,7 @@ export const Header: React.FC = () => {
                 </div>
 
                 <div className="p-2 border-t border-slate-100 bg-slate-50 text-center">
-                  <button 
+                  <button
                     onClick={() => {
                       setActiveTab('settings');
                       setNotificationsOpen(false);
@@ -339,7 +333,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Help Question Icon (Desktop) */}
-          <button 
+          <button
             onClick={() => {
               showToast('ScaleAstra v1.0 • WhatsApp Sales Automation Platform');
             }}
@@ -351,7 +345,7 @@ export const Header: React.FC = () => {
 
           {/* Profile Avatar Pill & Menu */}
           <div className="relative">
-            <div 
+            <div
               onClick={() => {
                 setProfileOpen(!profileOpen);
                 setDateMenuOpen(false);
@@ -371,11 +365,11 @@ export const Header: React.FC = () => {
             {profileOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50 text-xs animate-scaleIn">
                 <div className="px-3.5 py-2 border-b border-slate-100">
-                  <p className="font-bold text-slate-900">Manicka Pream</p>
+                  <p className="font-bold text-slate-900">Dhanaraj </p>
                   <p className="text-[11px] text-slate-500">Founder & Workspace Admin</p>
                 </div>
                 <div className="py-1">
-                  <button 
+                  <button
                     onClick={() => {
                       setActiveTab('settings');
                       setProfileOpen(false);
@@ -385,7 +379,7 @@ export const Header: React.FC = () => {
                     <SettingsIcon className="w-3.5 h-3.5 text-slate-400" />
                     <span>Workspace Settings</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setActiveModal('manageIntegrations');
                       setProfileOpen(false);
@@ -425,9 +419,8 @@ export const Header: React.FC = () => {
                     updateWorkspace({ name: opt });
                     setWorkspaceMenuOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                    workspace.name === opt ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                  }`}
+                  className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${workspace.name === opt ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                    }`}
                 >
                   {opt}
                 </button>
@@ -455,9 +448,8 @@ export const Header: React.FC = () => {
                     setDateRange(opt.value);
                     setDateMenuOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                    dateRange === opt.value ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                  }`}
+                  className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${dateRange === opt.value ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                    }`}
                 >
                   {opt.label}
                 </button>

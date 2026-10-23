@@ -1,39 +1,39 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from 'firebase/auth';
-import { 
-  ViewMode, 
-  NavTab, 
-  BusinessWorkspace, 
-  Lead, 
-  Customer, 
-  Product, 
-  Order, 
-  Invoice, 
-  WorkflowDefinition, 
-  WorkflowExecution, 
-  IntegrationSetting, 
-  ConsentRecord, 
+import {
+  ViewMode,
+  NavTab,
+  BusinessWorkspace,
+  Lead,
+  Customer,
+  Product,
+  Order,
+  Invoice,
+  WorkflowDefinition,
+  WorkflowExecution,
+  IntegrationSetting,
+  ConsentRecord,
   AuditLog,
   DashboardTask,
   DashboardNotification
 } from '../types';
-import { 
-  initialWorkspace, 
-  initialLeads, 
-  initialCustomers, 
-  initialProducts, 
-  initialOrders, 
-  initialInvoices, 
-  initialWorkflows, 
-  initialExecutions, 
-  initialIntegrations, 
-  initialConsentRecords, 
-  initialAuditLogs 
+import {
+  initialWorkspace,
+  initialLeads,
+  initialCustomers,
+  initialProducts,
+  initialOrders,
+  initialInvoices,
+  initialWorkflows,
+  initialExecutions,
+  initialIntegrations,
+  initialConsentRecords,
+  initialAuditLogs
 } from '../data/mockData';
-import { 
-  subscribeToAuth, 
-  signInWithEmail, 
-  signUpWithEmail, 
+import {
+  subscribeToAuth,
+  signInWithEmail,
+  signUpWithEmail,
   signOutUser,
   subscribeToLeads,
   subscribeToCustomers,
@@ -129,7 +129,7 @@ interface AppContextType {
   // Notifications
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
-  
+
   // Interactive Flowchart Simulator
   simulationActive: boolean;
   currentSimStep: number;
@@ -351,7 +351,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `audit_${Date.now()}`,
       businessId: workspace.id,
       actorId: firebaseUser ? firebaseUser.uid : 'usr_founder',
-      actorName: firebaseUser ? (firebaseUser.email || 'Firebase User') : 'Manicka Pream (Owner)',
+      actorName: firebaseUser ? (firebaseUser.email || 'Firebase User') : 'Dhanaraj (Owner)',
       role: 'Founder / Admin',
       action,
       entityType,
@@ -1002,11 +1002,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       step: '1. Inbound Lead Ingestion',
       label: 'Choose Lead Source -> Validate Incoming Lead Data',
       decision: 'YES',
-      detail: sampleType === 'valid_meta' 
+      detail: sampleType === 'valid_meta'
         ? 'Meta Lead Ads Webhook received: Priya Sundaram (+91 98402 99112). Signature HMAC verified.'
         : sampleType === 'duplicate_phone'
-        ? 'Website Form submitted: Karthik Subramanian (+91 98401 23456).'
-        : 'WhatsApp Enquiry: Ramesh Kumar (+91 97900 11223) with opt-out header.',
+          ? 'Website Form submitted: Karthik Subramanian (+91 98401 23456).'
+          : 'WhatsApp Enquiry: Ramesh Kumar (+91 97900 11223) with opt-out header.',
       status: 'passed'
     });
 
@@ -1025,7 +1025,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       step: '3. Deduplication Engine',
       label: 'Is this a duplicate lead?',
       decision: isDup ? 'YES' : 'NO',
-      detail: isDup 
+      detail: isDup
         ? 'Phone (+91 98401 23456) matches existing Lead #101. Lead record updated; duplicate message suppressed.'
         : 'No previous lead in 48-hour window. Proceeding to create new lead record.',
       status: isDup ? 'warning' : 'passed'

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { 
-  Plus, 
-  ChevronDown, 
-  TrendingUp, 
-  Check, 
+import {
+  Plus,
+  ChevronDown,
+  TrendingUp,
+  Check,
   ExternalLink,
   Sparkles,
   Play,
@@ -16,9 +16,9 @@ import {
 } from 'lucide-react';
 
 export const DashboardView: React.FC = () => {
-  const { 
-    leads, 
-    orders, 
+  const {
+    leads,
+    orders,
     invoices,
     integrations,
     executions,
@@ -28,8 +28,8 @@ export const DashboardView: React.FC = () => {
     toggleTask,
     deleteTask,
     dateRange,
-    workspace, 
-    setActiveTab, 
+    workspace,
+    setActiveTab,
     setActiveModal,
     showToast
   } = useApp();
@@ -182,12 +182,12 @@ export const DashboardView: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      
+
       {/* Top Greeting & Action Header (Matching Screenshot) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-heading font-extrabold text-slate-900 tracking-tight">
-            Good morning, Manicka Pream
+            Hello,
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             Here's what's happening with your business today.
@@ -223,9 +223,9 @@ export const DashboardView: React.FC = () => {
 
       {/* 4 Metric Cards with Sparklines (Matching Screenshot, Dynamically Updated!) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
+
         {/* Card 1: New Leads */}
-        <div 
+        <div
           onClick={() => setActiveTab('leads')}
           className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer relative group"
         >
@@ -248,7 +248,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Card 2: Contacted */}
-        <div 
+        <div
           onClick={() => setActiveTab('leads')}
           className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer relative group"
         >
@@ -267,7 +267,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Card 3: Orders */}
-        <div 
+        <div
           onClick={() => setActiveTab('orders')}
           className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer relative group"
         >
@@ -286,7 +286,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Card 4: Revenue */}
-        <div 
+        <div
           onClick={() => setActiveTab('invoices')}
           className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer relative group"
         >
@@ -308,7 +308,7 @@ export const DashboardView: React.FC = () => {
 
       {/* Middle Row: Sales & Lead Performance Line Chart + Lead Conversion Funnel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
         {/* Sales & Lead Performance (7 cols) - Interactive Dropdowns & Live Bezier SVG */}
         <div className="lg:col-span-7 p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -317,10 +317,10 @@ export const DashboardView: React.FC = () => {
             </h2>
 
             <div className="flex items-center gap-1.5 text-xs">
-              
+
               {/* Metric Dropdown */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => {
                     setChartMetricOpen(!chartMetricOpen);
                     setChartGroupingOpen(false);
@@ -341,9 +341,8 @@ export const DashboardView: React.FC = () => {
                           setChartMetricOpen(false);
                           showToast(`Chart metric changed to ${m}`);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${
-                          chartMetric === m ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${chartMetric === m ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {m}
                       </button>
@@ -354,7 +353,7 @@ export const DashboardView: React.FC = () => {
 
               {/* Grouping Dropdown */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => {
                     setChartGroupingOpen(!chartGroupingOpen);
                     setChartMetricOpen(false);
@@ -374,9 +373,8 @@ export const DashboardView: React.FC = () => {
                           setChartGrouping(g);
                           setChartGroupingOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                          chartGrouping === g ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${chartGrouping === g ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {g}
                       </button>
@@ -387,7 +385,7 @@ export const DashboardView: React.FC = () => {
 
               {/* Period Dropdown */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => {
                     setChartPeriodOpen(!chartPeriodOpen);
                     setChartMetricOpen(false);
@@ -407,9 +405,8 @@ export const DashboardView: React.FC = () => {
                           setChartPeriod(p);
                           setChartPeriodOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                          chartPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${chartPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {p}
                       </button>
@@ -430,30 +427,30 @@ export const DashboardView: React.FC = () => {
               <line x1="0" y1="120" x2="500" y2="120" stroke="#F1F5F9" strokeWidth="1" />
 
               {/* Green Line (Primary) */}
-              <path 
-                d={chartConfigs.d1} 
-                fill="none" 
-                stroke={chartConfigs.color1} 
-                strokeWidth="2.5" 
+              <path
+                d={chartConfigs.d1}
+                fill="none"
+                stroke={chartConfigs.color1}
+                strokeWidth="2.5"
                 className="transition-all duration-500 ease-in-out"
               />
 
               {/* Purple/Blue Line (Secondary) */}
-              <path 
-                d={chartConfigs.d2} 
-                fill="none" 
-                stroke={chartConfigs.color2} 
-                strokeWidth="2.5" 
+              <path
+                d={chartConfigs.d2}
+                fill="none"
+                stroke={chartConfigs.color2}
+                strokeWidth="2.5"
                 strokeDasharray="4 2"
                 className="transition-all duration-500 ease-in-out"
               />
 
               {/* Interactive Points */}
               {chartConfigs.points.map((pt, i) => (
-                <circle 
-                  key={i} 
-                  cx={pt.x} 
-                  cy={pt.y} 
+                <circle
+                  key={i}
+                  cx={pt.x}
+                  cy={pt.y}
                   r={hoveredPoint?.label === pt.label ? 5 : 3.5}
                   fill={chartConfigs.color1}
                   className="cursor-pointer hover:r-6 transition-all"
@@ -465,7 +462,7 @@ export const DashboardView: React.FC = () => {
 
             {/* Live Chart Point Tooltip */}
             {hoveredPoint && (
-              <div 
+              <div
                 className="absolute bg-slate-900 text-white text-[11px] px-2.5 py-1.5 rounded-lg shadow-xl pointer-events-none -translate-x-1/2 -translate-y-full z-20"
                 style={{ left: `${(hoveredPoint.x / 500) * 100}%`, top: `${(hoveredPoint.y / 150) * 100}%` }}
               >
@@ -499,10 +496,10 @@ export const DashboardView: React.FC = () => {
             <h2 className="text-sm font-heading font-bold text-slate-900">
               Lead Conversion Funnel
             </h2>
-            
+
             {/* Funnel Period Dropdown */}
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setFunnelDropdownOpen(!funnelDropdownOpen)}
                 className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 text-xs font-medium"
               >
@@ -519,9 +516,8 @@ export const DashboardView: React.FC = () => {
                         setFunnelPeriod(p);
                         setFunnelDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                        funnelPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                      }`}
+                      className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${funnelPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                        }`}
                     >
                       {p}
                     </button>
@@ -547,7 +543,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-3">
               <span className="w-20 font-medium text-slate-600">Contacted</span>
               <div className="flex-1 bg-slate-100 rounded-lg h-7 relative flex items-center px-3 overflow-hidden">
-                <div 
+                <div
                   className="absolute left-0 top-0 bottom-0 bg-[#D4E8B8] rounded-lg transition-all duration-500"
                   style={{ width: `${pctContacted}%` }}
                 />
@@ -560,7 +556,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-3">
               <span className="w-20 font-medium text-slate-600">Qualified</span>
               <div className="flex-1 bg-slate-100 rounded-lg h-7 relative flex items-center px-3 overflow-hidden">
-                <div 
+                <div
                   className="absolute left-0 top-0 bottom-0 bg-[#FFD7C2] rounded-lg transition-all duration-500"
                   style={{ width: `${pctQualified}%` }}
                 />
@@ -573,7 +569,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center gap-3">
               <span className="w-20 font-medium text-slate-600">Converted</span>
               <div className="flex-1 bg-slate-100 rounded-lg h-7 relative flex items-center px-3 overflow-hidden">
-                <div 
+                <div
                   className="absolute left-0 top-0 bottom-0 bg-[#FFD7C2] rounded-lg transition-all duration-500"
                   style={{ width: `${pctConverted}%` }}
                 />
@@ -588,7 +584,7 @@ export const DashboardView: React.FC = () => {
 
       {/* Row: Recent Activity & Tasks and Follow-ups (Matching Screenshot) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
         {/* Recent Activity (7 cols) - Dynamic Feed with Filter Dropdown */}
         <div className="lg:col-span-7 p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
@@ -598,7 +594,7 @@ export const DashboardView: React.FC = () => {
 
             <div className="flex items-center gap-3 text-xs">
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setActivityDropdownOpen(!activityDropdownOpen)}
                   className="flex items-center gap-1 text-slate-500 hover:text-slate-800 capitalize"
                 >
@@ -614,9 +610,8 @@ export const DashboardView: React.FC = () => {
                           setActivityFilter(act);
                           setActivityDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${
-                          activityFilter === act ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${activityFilter === act ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {act === 'all' ? 'All activity' : act}
                       </button>
@@ -625,7 +620,7 @@ export const DashboardView: React.FC = () => {
                 )}
               </div>
 
-              <button 
+              <button
                 onClick={() => setActiveTab('settings')}
                 className="text-orange-600 hover:text-orange-700 font-semibold"
               >
@@ -656,7 +651,7 @@ export const DashboardView: React.FC = () => {
               </h2>
 
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setTaskDropdownOpen(!taskDropdownOpen)}
                   className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 capitalize font-medium"
                 >
@@ -672,9 +667,8 @@ export const DashboardView: React.FC = () => {
                           setTaskPeriod(p);
                           setTaskDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${
-                          taskPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 capitalize ${taskPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {p}
                       </button>
@@ -706,7 +700,7 @@ export const DashboardView: React.FC = () => {
                     </label>
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] text-slate-400 font-mono">{task.time}</span>
-                      <button 
+                      <button
                         onClick={() => deleteTask(task.id)}
                         className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-opacity p-0.5"
                         title="Delete task"
@@ -739,7 +733,7 @@ export const DashboardView: React.FC = () => {
           </div>
 
           <div className="pt-2 text-right">
-            <button 
+            <button
               onClick={() => showToast('All pending customer follow-ups synchronized')}
               className="text-xs text-orange-600 hover:text-orange-700 font-semibold"
             >
@@ -752,7 +746,7 @@ export const DashboardView: React.FC = () => {
 
       {/* Bottom Grid: Integration Status + Automation Health + Quick Actions (Matching Screenshot) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         {/* Card 1: Integration Status - Dynamic Live Badges & Modal Opener */}
         <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
           <div>
@@ -763,36 +757,32 @@ export const DashboardView: React.FC = () => {
             <div className="space-y-2.5 text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-700">Meta Lead Forms</span>
-                <span className={`font-medium ${
-                  metaInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-orange-600'
-                }`}>
+                <span className={`font-medium ${metaInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-orange-600'
+                  }`}>
                   {metaInt?.status === 'connected' ? 'Connected • Live' : 'Needs setup'}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-slate-700">WhatsApp Business</span>
-                <span className={`font-medium ${
-                  waInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-rose-600'
-                }`}>
+                <span className={`font-medium ${waInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-rose-600'
+                  }`}>
                   {waInt?.status === 'connected' ? 'Connected • Live' : 'Not connected'}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-slate-700">Payments</span>
-                <span className={`font-medium ${
-                  payInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-rose-600'
-                }`}>
+                <span className={`font-medium ${payInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-rose-600'
+                  }`}>
                   {payInt?.status === 'connected' ? 'Connected • Live' : 'Not connected'}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-slate-700">Invoicing</span>
-                <span className={`font-medium ${
-                  invInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-orange-600'
-                }`}>
+                <span className={`font-medium ${invInt?.status === 'connected' ? 'text-emerald-600 font-bold' : 'text-orange-600'
+                  }`}>
                   {invInt?.status === 'connected' ? 'Connected • Live' : 'Setup required'}
                 </span>
               </div>
@@ -816,7 +806,7 @@ export const DashboardView: React.FC = () => {
               </h2>
 
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setHealthDropdownOpen(!healthDropdownOpen)}
                   className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 font-medium"
                 >
@@ -832,9 +822,8 @@ export const DashboardView: React.FC = () => {
                           setHealthPeriod(p);
                           setHealthDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${
-                          healthPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
-                        }`}
+                        className={`w-full text-left px-3 py-1.5 hover:bg-slate-50 ${healthPeriod === p ? 'font-bold text-orange-600 bg-orange-50/50' : 'text-slate-700'
+                          }`}
                       >
                         {p}
                       </button>

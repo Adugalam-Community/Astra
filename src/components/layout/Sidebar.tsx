@@ -1,20 +1,20 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { NavTab } from '../../types';
-import { 
-  Home, 
-  Users, 
-  UserCheck, 
-  Package, 
-  ShoppingCart, 
-  FileText, 
-  Share2, 
-  Megaphone, 
-  MessageSquare, 
-  Network, 
-  BarChart3, 
-  Settings, 
-  HelpCircle, 
+import {
+  Home,
+  Users,
+  UserCheck,
+  Package,
+  ShoppingCart,
+  FileText,
+  Share2,
+  Megaphone,
+  MessageSquare,
+  Network,
+  BarChart3,
+  Settings,
+  HelpCircle,
   ChevronLeft,
   GitFork,
   X,
@@ -30,14 +30,14 @@ interface SidebarItem {
 }
 
 export const Sidebar: React.FC = () => {
-  const { 
-    activeTab, 
-    setActiveTab, 
-    leads, 
-    orders, 
+  const {
+    activeTab,
+    setActiveTab,
+    leads,
+    orders,
     workspace,
-    isMobileMenuOpen, 
-    setIsMobileMenuOpen 
+    isMobileMenuOpen,
+    setIsMobileMenuOpen
   } = useApp();
 
   const newLeads = leads.filter(l => l.status === 'New').length;
@@ -61,7 +61,7 @@ export const Sidebar: React.FC = () => {
     <>
       {/* ================= 1. DESKTOP SIDEBAR ================= */}
       <aside className="w-56 flex-shrink-0 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex h-[calc(100vh-53px)] sticky top-[53px]">
-        
+
         {/* Navigation List */}
         <div className="p-3 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
@@ -71,11 +71,10 @@ export const Sidebar: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id as NavTab)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                  isActive
-                    ? 'bg-[#FFF1EB] text-[#EA580C] font-semibold border border-[#FED7AA]'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${isActive
+                  ? 'bg-[#FFF1EB] text-[#EA580C] font-semibold border border-[#FED7AA]'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
               >
                 <div className="flex items-center gap-2.5">
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#EA580C]' : 'text-slate-400'}`} />
@@ -94,7 +93,7 @@ export const Sidebar: React.FC = () => {
 
         {/* Bottom Footer Links */}
         <div className="p-3 border-t border-slate-100 space-y-1 text-xs text-slate-500">
-          <button 
+          <button
             onClick={() => setActiveTab('settings')}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors"
           >
@@ -113,9 +112,9 @@ export const Sidebar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden animate-fadeIn">
           {/* Backdrop */}
-          <div 
+          <div
             onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs" 
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs"
           />
 
           {/* Drawer Content */}
@@ -152,11 +151,10 @@ export const Sidebar: React.FC = () => {
                         setActiveTab(item.id as NavTab);
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
-                        isActive
-                          ? 'bg-[#FFF1EB] text-[#EA580C] font-bold border border-[#FED7AA]'
-                          : 'text-slate-700 hover:bg-slate-50'
-                      }`}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${isActive
+                        ? 'bg-[#FFF1EB] text-[#EA580C] font-bold border border-[#FED7AA]'
+                        : 'text-slate-700 hover:bg-slate-50'
+                        }`}
                     >
                       <div className="flex items-center gap-3">
                         <Icon className={`w-4 h-4 ${isActive ? 'text-[#EA580C]' : 'text-slate-400'}`} />
@@ -182,7 +180,7 @@ export const Sidebar: React.FC = () => {
                 </div>
                 <div>
                   <p className="font-bold text-slate-800 text-xs leading-none">Admin</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Manicka Pream</p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">Dhanaraj</p>
                 </div>
               </div>
 
@@ -206,9 +204,8 @@ export const Sidebar: React.FC = () => {
         {/* Tab 1: Dashboard */}
         <button
           onClick={() => setActiveTab('dashboard')}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
-            activeTab === 'dashboard' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
-          }`}
+          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${activeTab === 'dashboard' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+            }`}
         >
           <Home className={`w-4 h-4 mb-0.5 ${activeTab === 'dashboard' ? 'text-orange-600' : 'text-slate-400'}`} />
           <span>Home</span>
@@ -217,9 +214,8 @@ export const Sidebar: React.FC = () => {
         {/* Tab 2: Leads */}
         <button
           onClick={() => setActiveTab('leads')}
-          className={`relative flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
-            activeTab === 'leads' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
-          }`}
+          className={`relative flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${activeTab === 'leads' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+            }`}
         >
           <div className="relative">
             <Users className={`w-4 h-4 mb-0.5 ${activeTab === 'leads' ? 'text-orange-600' : 'text-slate-400'}`} />
@@ -235,9 +231,8 @@ export const Sidebar: React.FC = () => {
         {/* Tab 3: Orders */}
         <button
           onClick={() => setActiveTab('orders')}
-          className={`relative flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
-            activeTab === 'orders' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
-          }`}
+          className={`relative flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${activeTab === 'orders' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+            }`}
         >
           <div className="relative">
             <ShoppingCart className={`w-4 h-4 mb-0.5 ${activeTab === 'orders' ? 'text-orange-600' : 'text-slate-400'}`} />
@@ -253,9 +248,8 @@ export const Sidebar: React.FC = () => {
         {/* Tab 4: Invoices */}
         <button
           onClick={() => setActiveTab('invoices')}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
-            activeTab === 'invoices' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
-          }`}
+          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${activeTab === 'invoices' ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+            }`}
         >
           <FileText className={`w-4 h-4 mb-0.5 ${activeTab === 'invoices' ? 'text-orange-600' : 'text-slate-400'}`} />
           <span>Invoices</span>
@@ -264,9 +258,8 @@ export const Sidebar: React.FC = () => {
         {/* Tab 5: More (Drawer Trigger) */}
         <button
           onClick={() => setIsMobileMenuOpen(true)}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
-            isMobileMenuOpen ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
-          }`}
+          className={`flex flex-col items-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${isMobileMenuOpen ? 'text-orange-600 font-bold' : 'text-slate-500 hover:text-slate-800'
+            }`}
         >
           <Menu className="w-4 h-4 mb-0.5 text-slate-400" />
           <span>More</span>

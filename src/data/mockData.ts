@@ -1,15 +1,15 @@
-import { 
-  BusinessWorkspace, 
-  Lead, 
-  Customer, 
-  Product, 
-  Order, 
-  Invoice, 
-  WorkflowDefinition, 
-  WorkflowExecution, 
-  IntegrationSetting, 
-  ConsentRecord, 
-  AuditLog 
+import {
+  BusinessWorkspace,
+  Lead,
+  Customer,
+  Product,
+  Order,
+  Invoice,
+  WorkflowDefinition,
+  WorkflowExecution,
+  IntegrationSetting,
+  ConsentRecord,
+  AuditLog
 } from '../types';
 
 export const initialWorkspace: BusinessWorkspace = {
@@ -655,7 +655,7 @@ export const initialAuditLogs: AuditLog[] = [
     id: 'audit_01',
     businessId: 'biz_purewild_001',
     actorId: 'usr_founder',
-    actorName: 'Manicka Pream',
+    actorName: 'Dhanaraj',
     role: 'Owner',
     action: 'VERIFY_PAYMENT',
     entityType: 'Order',
@@ -694,7 +694,7 @@ export const initialAuditLogs: AuditLog[] = [
     id: 'audit_04',
     businessId: 'biz_purewild_001',
     actorId: 'usr_founder',
-    actorName: 'Manicka Pream',
+    actorName: 'Dhanaraj',
     role: 'Owner',
     action: 'STOCK_UPDATE',
     entityType: 'Settings',
